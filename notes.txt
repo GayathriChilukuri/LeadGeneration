@@ -1,0 +1,36 @@
+lead_generation/
+│
+├── api/
+│   ├── routes.py
+│   └── schemas.py
+│
+├── core/
+│   └── config.py
+│
+├── discovery/
+│   └── google_places.py
+│
+├── models/
+│   └── company.py
+│
+├── services/
+│   └── lead_generation_service.py
+│
+├── main.py
+│
+├── .env
+│
+├── requirements.txt
+
+
+-------------------------------------------------------------------------
+
+
+main.py
+   |
+   └── api/routes.py
+            |
+            └── services/lead_generation_service.py
+                        |
+                        ├── discovery/google_places.py
+                        └── models/company.py
