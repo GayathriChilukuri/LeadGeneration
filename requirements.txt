@@ -1,5 +1,13 @@
 fastapi
 uvicorn
 requests
+requests[socks]
 python-dotenv
 pydantic
+httpx[http2]
+tenacity
+aiolimiter
+psycopg2-binary
+beautifulsoup4
+lxml
+playwright

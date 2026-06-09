@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Lead Generator UI</title>
+  <style>body{font-family:Arial;margin:20px}label{display:block;margin-top:8px}button{margin-top:12px}</style>
+</head>
+<body>
+  <h1>Lead Generator</h1>
+  <label>Industry: <input id="industry" value="real estate"/></label>
+  <label>City: <input id="city" value="Hyderabad"/></label>
+  <label>Max jobs: <input id="max" value="20"/></label>
+  <button id="start">Start</button>
+
+  <h2>Session</h2>
+  <div id="session">Not started</div>
+
+  <h2>Progress</h2>
+  <pre id="progress">-</pre>
+
+  <button id="download" disabled>Download CSV</button>
+
+  <script>
+    let session = null
+    document.getElementById('start').onclick = async ()=>{
+      const industry = document.getElementById('industry').value
+      const city = document.getElementById('city').value
+      const max = parseInt(document.getElementById('max').value)||0
+      const res = await fetch('/start', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({industry,city,max_jobs:max})})
+      const data = await res.json()
+      if(data.session_id){
+        session = data.session_id
+        document.getElementById('session').innerText = session
+        poll()
+      } else {
+        document.getElementById('session').innerText = JSON.stringify(data)
+      }
+    }
+
+    async function poll(){
+      if(!session) return
+      const res = await fetch(`/status/${session}`)
+      if(res.status===200){
+        const data = await res.json()
+        document.getElementById('progress').innerText = JSON.stringify(data, null, 2)
+        if(data.completed >= data.total && data.total>0){
+          document.getElementById('download').disabled = false
+        } else {
+          setTimeout(poll, 3000)
+        }
+      } else {
+        document.getElementById('progress').innerText = 'session not found'
+      }
+    }
+
+    document.getElementById('download').onclick = ()=>{
+      if(!session) return
+      window.location = `/download/${session}`
+    }
+  </script>
+</body>
+</html>

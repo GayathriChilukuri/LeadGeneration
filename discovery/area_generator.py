@@ -36,18 +36,19 @@ def generate_queries(
     city: str
 ):
 
+    return generate_queries_for_areas(industry, city, HYDERABAD_AREAS)
+
+
+def generate_queries_for_areas(industry: str, city: str, areas):
+    """Generate queries for a provided list of areas.
+
+    Keeps original behavior when called without areas by using the default list.
+    """
     queries = []
 
-    for area in HYDERABAD_AREAS:
-
+    for area in areas:
         for pattern in SEARCH_PATTERNS:
-
-            query = pattern.format(
-                industry=industry,
-                area=area,
-                city=city
-            )
-
+            query = pattern.format(industry=industry, area=area, city=city)
             queries.append(query)
 
     return queries
